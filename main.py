@@ -1,4 +1,3 @@
-
 import matplotlib.image as mpimg
 import numpy as np
 from matplotlib import pyplot as plt
@@ -30,20 +29,28 @@ def showPlot(img):
     plt.imshow(img)
     plt.show()
 
+
 def saveOutput(img, name):
     Path("output").mkdir(parents=True, exist_ok=True)
     mpimg.imsave("output/" + name, img)
+
 
 def readImage(path):
     img = mpimg.imread("images/" + path)
     return img
 
+
 if __name__ == '__main__':
-    name="bird_1.jpg"
-    img= readImage(name)
-    img = img_as_ubyte(img)
-    showPlot(img)
-    plt.set_cmap(plt.get_cmap(name='gray'))
-    if len(img.shape) == 3:
-        img = rgb_to_gray(img)
-        saveOutput(img, "gray_" + name)
+    birdnames = ["bird_1.jpg", "bird_2.jpg", "bird_3.bmp"]
+    for name in birdnames:
+        img = readImage(name)
+        img = img_as_ubyte(img)
+        showPlot(img)
+        plt.set_cmap(plt.get_cmap(name='gray'))
+        if len(img.shape) == 3:
+            img = rgb_to_gray(img)
+
+        (thresh, im_bw) = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+        thresh = 127
+        im_bw = cv2.threshold(img, thresh, 255, cv2.THRESH_BINARY)[1]
+        saveOutput(im_bw, name)
