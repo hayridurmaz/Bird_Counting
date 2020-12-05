@@ -50,7 +50,7 @@ if __name__ == '__main__':
         if len(img.shape) == 3:
             img = rgb_to_gray(img)
 
-        (thresh, im_bw) = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-        thresh = 127
-        im_bw = cv2.threshold(img, thresh, 255, cv2.THRESH_BINARY)[1]
-        saveOutput(im_bw, name)
+        ret, thresh = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+        # print(ret)
+
+        saveOutput(thresh,name)
