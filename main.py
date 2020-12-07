@@ -56,42 +56,42 @@ def globalThresholding(image, threshold=127):
     return img
 
 
-def thresholdIntegral(inputMat, s, T=0.15):
-    # outputMat=np.uint8(np.ones(inputMat.shape)*255)
-    outputMat = np.zeros(inputMat.shape)
-    nRows = inputMat.shape[0]
-    nCols = inputMat.shape[1]
-    S = int(max(nRows, nCols) / 8)
-
-    s2 = int(S / 4)
-
-    for i in range(nRows):
-        y1 = i - s2
-        y2 = i + s2
-
-        if (y1 < 0):
-            y1 = 0
-        if (y2 >= nRows):
-            y2 = nRows - 1
-
-        for j in range(nCols):
-            x1 = j - s2
-            x2 = j + s2
-
-            if (x1 < 0):
-                x1 = 0
-            if (x2 >= nCols):
-                x2 = nCols - 1
-            count = (x2 - x1) * (y2 - y1)
-
-            sum = s[y2][x2] - s[y2][x1] - s[y1][x2] + s[y1][x1]
-
-            if ((int)(inputMat[i][j] * count) < (int)(sum * (1.0 - T))):
-                outputMat[i][j] = 255
-                # print(i,j)
-            # else:
-            #     outputMat[j][i] = 0
-    return outputMat
+# def thresholdIntegral(inputMat, s, T=0.15):
+#     # outputMat=np.uint8(np.ones(inputMat.shape)*255)
+#     outputMat = np.zeros(inputMat.shape)
+#     nRows = inputMat.shape[0]
+#     nCols = inputMat.shape[1]
+#     S = int(max(nRows, nCols) / 8)
+#
+#     s2 = int(S / 4)
+#
+#     for i in range(nRows):
+#         y1 = i - s2
+#         y2 = i + s2
+#
+#         if (y1 < 0):
+#             y1 = 0
+#         if (y2 >= nRows):
+#             y2 = nRows - 1
+#
+#         for j in range(nCols):
+#             x1 = j - s2
+#             x2 = j + s2
+#
+#             if (x1 < 0):
+#                 x1 = 0
+#             if (x2 >= nCols):
+#                 x2 = nCols - 1
+#             count = (x2 - x1) * (y2 - y1)
+#
+#             sum = s[y2][x2] - s[y2][x1] - s[y1][x2] + s[y1][x1]
+#
+#             if ((int)(inputMat[i][j] * count) < (int)(sum * (1.0 - T))):
+#                 outputMat[i][j] = 255
+#                 # print(i,j)
+#             # else:
+#             #     outputMat[j][i] = 0
+#     return outputMat
 
 
 def getOtsuThreshold(im):
@@ -118,66 +118,66 @@ def getOtsuThreshold(im):
     return in_class_variance_list.index(min(in_class_variance_list))
 
 
-def convolution(image, kernel):
-    """
-    This function which takes an image and a kernel and returns the convolution of them.
-    """
-    # Flip the kernel
-    kernel = np.flipud(np.fliplr(kernel))
-    # convolution output filled with zeros
-    output = np.zeros_like(image)
-
-    # Add zero padding to the input image
-    image_padded = np.zeros((image.shape[0] + 2, image.shape[1] + 2))
-    image_padded[1:-1, 1:-1] = image
-
-    # Loop over every pixel of the image
-    for x in range(image.shape[0]):
-        for y in range(image.shape[1]):
-            # element-wise multiplication of the kernel and the image
-            output[x, y] = (kernel * image_padded[x: x + 3, y: y + 3]).sum()
-
-    return output
-
-
-def threshold(img):
-    rowSize, columnSize = img.shape
-    thresholdedMap = np.zeros((rowSize, columnSize))
-
-    for row in range(1, rowSize - 1):
-        for col in range(1, columnSize - 1):
-
-            # If pixel value is higher than highthreshold, it is strong edge
-            if img[row, col] >= highThresholdRatio:
-                thresholdedMap[row, col] = strong
-
-            # If pixel value is in between thresholds, it is weak edge
-            elif lowThresholdRatio <= img[row, col] and img[row, col] < highThresholdRatio:
-                thresholdedMap[row, col] = weak
-
-            # If pixel value is lower than lowthreshold, it is non-relevant pixel, zero out it
-            elif img[row, col] < lowThresholdRatio:
-                thresholdedMap[row, col] = 0
-
-    return thresholdedMap
+# def convolution(image, kernel):
+#     """
+#     This function which takes an image and a kernel and returns the convolution of them.
+#     """
+#     # Flip the kernel
+#     kernel = np.flipud(np.fliplr(kernel))
+#     # convolution output filled with zeros
+#     output = np.zeros_like(image)
+#
+#     # Add zero padding to the input image
+#     image_padded = np.zeros((image.shape[0] + 2, image.shape[1] + 2))
+#     image_padded[1:-1, 1:-1] = image
+#
+#     # Loop over every pixel of the image
+#     for x in range(image.shape[0]):
+#         for y in range(image.shape[1]):
+#             # element-wise multiplication of the kernel and the image
+#             output[x, y] = (kernel * image_padded[x: x + 3, y: y + 3]).sum()
+#
+#     return output
 
 
-def BlurImage(image):
-    '''
-        This function blurs image with an mean filter
-    :param image:
-    :return:
-    '''
-    mean_kernel = np.array(
-        [
-            [1, 1, 1],
-            [1, 1, 1],
-            [1, 1, 1]
-        ]
-    ) / 9.0
-    im_filtered = np.zeros_like(image)
-    im_filtered[:, :] = convolution(image[:, :], mean_kernel)
-    return im_filtered
+# def threshold(img):
+#     rowSize, columnSize = img.shape
+#     thresholdedMap = np.zeros((rowSize, columnSize))
+#
+#     for row in range(1, rowSize - 1):
+#         for col in range(1, columnSize - 1):
+#
+#             # If pixel value is higher than highthreshold, it is strong edge
+#             if img[row, col] >= highThresholdRatio:
+#                 thresholdedMap[row, col] = strong
+#
+#             # If pixel value is in between thresholds, it is weak edge
+#             elif lowThresholdRatio <= img[row, col] and img[row, col] < highThresholdRatio:
+#                 thresholdedMap[row, col] = weak
+#
+#             # If pixel value is lower than lowthreshold, it is non-relevant pixel, zero out it
+#             elif img[row, col] < lowThresholdRatio:
+#                 thresholdedMap[row, col] = 0
+#
+#     return thresholdedMap
+
+
+# def BlurImage(image):
+#     '''
+#         This function blurs image with an mean filter
+#     :param image:
+#     :return:
+#     '''
+#     mean_kernel = np.array(
+#         [
+#             [1, 1, 1],
+#             [1, 1, 1],
+#             [1, 1, 1]
+#         ]
+#     ) / 9.0
+#     im_filtered = np.zeros_like(image)
+#     im_filtered[:, :] = convolution(image[:, :], mean_kernel)
+#     return im_filtered
 
 
 def setLabelRec(im, point, label):
@@ -206,7 +206,7 @@ def connectedComponents(im):
     label_counter = 0  # etiket sayaci
     white = np.argwhere(im == 255)
     # goruntudeki beyaz olan yerlerin koordinatlarini al
-    while len(white) > 100:
+    while len(white) > 0:
         # eger beyaz 100'den fazla beyaz nokta varsa
         setLabelRec(im, white[0], label_counter)
         # beyaz noktayi etiketle, rekursif bicimde
@@ -214,36 +214,36 @@ def connectedComponents(im):
         label_counter += 1  # etiket sayacini arttir
 
     label_counter -= 1  # extract backround
-    return label_counter
+    return label_counter, im
 
 
-def applyHysteresisThreshold(img):
-    # Get size of image
-    rowSize = img.shape[0]
-    columnSize = img.shape[1]
-
-    finalImage = np.zeros((rowSize, columnSize))
-
-    # Loop over thresholded map to find weak edges which indeed is strong edge
-    for row in range(1, rowSize - 1):
-        for col in range(1, columnSize - 1):
-
-            if img[row, col] == weak:
-
-                # Look at 8 neigbours of current pixel to find and connected strong value
-                if ((img[row + 1, col - 1] == strong) or (img[row + 1, col] == strong) or (
-                        img[row + 1, col + 1] == strong)
-                        or (img[row, col - 1] == strong) or (img[row, col + 1] == strong)
-                        or (img[row - 1, col - 1] == strong) or (img[row - 1, col] == strong) or (
-                                img[row - 1, col + 1] == strong)):
-                    finalImage[row, col] = 1
-                else:
-                    finalImage[row, col] = 0
-
-            elif img[row, col] == strong:
-                finalImage[row, col] = 1
-
-    return finalImage
+# def applyHysteresisThreshold(img):
+#     # Get size of image
+#     rowSize = img.shape[0]
+#     columnSize = img.shape[1]
+#
+#     finalImage = np.zeros((rowSize, columnSize))
+#
+#     # Loop over thresholded map to find weak edges which indeed is strong edge
+#     for row in range(1, rowSize - 1):
+#         for col in range(1, columnSize - 1):
+#
+#             if img[row, col] == weak:
+#
+#                 # Look at 8 neigbours of current pixel to find and connected strong value
+#                 if ((img[row + 1, col - 1] == strong) or (img[row + 1, col] == strong) or (
+#                         img[row + 1, col + 1] == strong)
+#                         or (img[row, col - 1] == strong) or (img[row, col + 1] == strong)
+#                         or (img[row - 1, col - 1] == strong) or (img[row - 1, col] == strong) or (
+#                                 img[row - 1, col + 1] == strong)):
+#                     finalImage[row, col] = 1
+#                 else:
+#                     finalImage[row, col] = 0
+#
+#             elif img[row, col] == strong:
+#                 finalImage[row, col] = 1
+#
+#     return finalImage
 
 
 def dilation(image):
@@ -311,8 +311,10 @@ if __name__ == '__main__':
         otsu_threshold = getOtsuThreshold(img)
         thresholded = globalThresholding(img, otsu_threshold)
 
-        open = opening(thresholded)
+        close = closing(thresholded)
+        open = opening(close)
 
-        showPlot(open)
-        labels = connectedComponents(open)
+        labels, result = connectedComponents(open)
+        showPlot(result, cmap="nipy_spectral")
         print(name + " NUMBER OF BIRDS: " + str(labels))
+        saveOutput(result, name)
